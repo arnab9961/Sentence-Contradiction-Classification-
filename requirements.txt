@@ -1,6 +1,4 @@
-streamlit
+Flask
 numpy
+joblib
 scikit-learn
-thefuzz
-python-Levenshtein
-fuzzywuzzy
