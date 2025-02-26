@@ -1,7 +1,8 @@
 streamlit
 numpy
-scikit-learn=1.2.2
+scikit-learn==1.2.2
 thefuzz
 python-Levenshtein
 fuzzywuzzy
 joblib
+requests
