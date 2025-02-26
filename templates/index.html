@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentence Contradiction Classifier</title>
+</head>
+<body>
+    <h2>Enter Two Sentences</h2>
+    <form method="POST">
+        <label>Sentence 1:</label>
+        <input type="text" name="sentence1" required><br><br>
+        <label>Sentence 2:</label>
+        <input type="text" name="sentence2" required><br><br>
+        <input type="submit" value="Check">
+    </form>
+    
+    {% if result %}
+        <h3>{{ result }}</h3>
+    {% endif %}
+</body>
+</html>
