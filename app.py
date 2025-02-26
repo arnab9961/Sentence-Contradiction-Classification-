@@ -1,62 +1,69 @@
 import streamlit as st
-import joblib
+import pickle
 import numpy as np
+import requests
 from thefuzz import fuzz
 import os
 
-# Set Page Title with Search Icon in Tab
-st.set_page_config(
-    page_title="🔍 Sentence Contradiction Classifier",
-    layout="centered"
-)
+# GitHub Raw File URLs
+MODEL_URL = "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/model.pkl"
+IMAGE_URL = "https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/image.png"
+
+def download_model():
+    model_path = "model.pkl"
+    if not os.path.exists(model_path):
+        response = requests.get(MODEL_URL)
+        if response.status_code == 200:
+            with open(model_path, "wb") as f:
+                f.write(response.content)
 
 def load_model():
-    try:
-        model_path = "model.joblib"
-        if not os.path.exists(model_path):
-            return None
-        return joblib.load(model_path)
-    except Exception:
-        return None
+    download_model()
+    with open("model.pkl", "rb") as f:
+        return pickle.load(f)
 
 def compute_features(sentence1, sentence2):
-    return np.array([sentence1, sentence2]).reshape(1, -1)
+    features = [
+        fuzz.QRatio(sentence1, sentence2),
+        fuzz.partial_ratio(sentence1, sentence2),
+        fuzz.token_sort_ratio(sentence1, sentence2),
+        fuzz.token_set_ratio(sentence1, sentence2)
+    ]
+    return np.array(features).reshape(1, -1)
 
-# Apply Gradient Background
-gradient_css = """
+# Apply Gradient Background & Image
+gradient_css = f"""
 <style>
-    [data-testid="stAppViewContainer"] {
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-    }
-    [data-testid="stHeader"] {
+    [data-testid="stAppViewContainer"] {{
+        background: url('{IMAGE_URL}');
+        background-size: cover;
+        background-position: center;
+    }}
+    [data-testid="stHeader"] {{
         background: rgba(0,0,0,0);
-    }
-    .title {
+    }}
+    .title {{
         font-size: 40px;
         font-weight: bold;
         text-align: center;
         color: white;
-    }
-    .title span {
-        color: yellow;
-        font-size: 60px;
-    }
-    .prediction-box {
+    }}
+    .prediction-box {{
         font-size: 28px; 
         font-weight: bold; 
         padding: 20px; 
         border-radius: 8px; 
         text-align: center;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.3);
         backdrop-filter: blur(10px);
         margin-top: 20px;
         color: white;
-    }
+    }}
 </style>
 """
 st.markdown(gradient_css, unsafe_allow_html=True)
 
-st.markdown('<div class="title"><span>S</span>entence Contradiction Classifier</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">🔍 Sentence Contradiction Classifier</div>', unsafe_allow_html=True)
 st.write("Enter two sentences to determine their relationship: Entailment, Neutral, or Contradiction.")
 
 sentence1 = st.text_input("Enter first sentence:")
@@ -76,7 +83,6 @@ if st.button("🔎 Classify"):
             except:
                 result = "⚠️ Error in model prediction"
         else:
-            # Fuzzy matching as a fallback
             avg_score = sum([
                 fuzz.QRatio(sentence1, sentence2),
                 fuzz.partial_ratio(sentence1, sentence2),
@@ -94,5 +100,5 @@ if st.button("🔎 Classify"):
         st.markdown(f'<div class="prediction-box">{result}</div>', unsafe_allow_html=True)
 
 st.markdown(
-    "**I sampled 3,000 rows from the dataset to reduce the size of the `.joblib` file, as a larger file would make deployment on Streamlit difficult. Otherwise, the results might show better.**"
+    "**Using model.pkl and image.png from GitHub to ensure easy deployment.**"
 )
