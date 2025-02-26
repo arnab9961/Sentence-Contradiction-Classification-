@@ -1,5 +1,6 @@
-Flask
+streamlit
 numpy
-joblib
-scikit-learn==1.2.2
-gunicorn
+scikit-learn
+thefuzz
+python-Levenshtein
+fuzzywuzzy
