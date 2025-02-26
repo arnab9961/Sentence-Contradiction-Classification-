@@ -14,9 +14,31 @@ def compute_features(sentence1, sentence2):
 
 # Streamlit UI
 st.set_page_config(page_title="Sentence Contradiction Classifier")
-st.title("🔍 Sentence Contradiction Classification")
+st.title("🔍 Contradictory, My Dear Watson")
 st.write("Enter two sentences to determine their relationship: Entailment, Neutral, or Contradiction.")
 
+# Apply Background Image with Opacity
+background_css = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background: url('image.png') no-repeat center center fixed;
+    background-size: cover;
+}
+[data-testid="stAppViewContainer"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6); /* 40% Opacity */
+    z-index: -1;
+}
+</style>
+"""
+st.markdown(background_css, unsafe_allow_html=True)
+
+# User Input
 sentence1 = st.text_input("Enter first sentence:")
 sentence2 = st.text_input("Enter second sentence:")
 
