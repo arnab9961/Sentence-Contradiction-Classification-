@@ -72,6 +72,4 @@ We deployed the model using **Streamlit**, allowing users to:
 👉 Enter **two sentences**  
 👉 Get a **classification result (Contradiction, Entailment, or Neutral)**  
 
-👉 **Try the Web App:** [👉 Click Here](https://sentenceclassifier.streamlit.app/)  
 
-![Application Screenshot](image.png)
