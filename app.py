@@ -17,14 +17,17 @@ st.set_page_config(page_title="Sentence Contradiction Classifier")
 st.title("🔍 Contradictory, My Dear Watson")
 st.write("Enter two sentences to determine their relationship: Entailment, Neutral, or Contradiction.")
 
+# Get absolute path of image
+image_path = os.path.abspath("image.png")
+
 # Apply Background Image with Opacity
-background_css = """
+background_css = f"""
 <style>
-[data-testid="stAppViewContainer"] {
-    background: url('image.png') no-repeat center center fixed;
+[data-testid="stAppViewContainer"] {{
+    background: url('file://{image_path}') no-repeat center center fixed;
     background-size: cover;
-}
-[data-testid="stAppViewContainer"]::before {
+}}
+[data-testid="stAppViewContainer"]::before {{
     content: "";
     position: absolute;
     top: 0;
@@ -33,7 +36,7 @@ background_css = """
     height: 100%;
     background: rgba(255, 255, 255, 0.6); /* 40% Opacity */
     z-index: -1;
-}
+}}
 </style>
 """
 st.markdown(background_css, unsafe_allow_html=True)
